@@ -83,16 +83,140 @@ namespace RapidOcrNet.Tests
                     "D" // Wrong
                 }
             },
-            /*
             new object[]
             {
-                "complexe_rotated_1.png", // text detection not good
+                "bold-italic_1.png",
+                new string[]
+                {
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                }
+            },
+            new object[]
+            {
+                "GHOSTSCRIPT-693073-1_2.png",
+                new string[]
+                {
+                    "This is test sample"
+                }
+            },
+            new object[]
+            {
+                "TIKA-1552-0_3.png",
                 new string[]
                 {
                 }
             },
-            */
+            new object[]
+            {
+                "2108.11480_1.png",
+                new string[]
+                {
+                }
+            },
         };
+
+        public static IEnumerable<object[]> TesseractImages => new[]
+        {
+            new object[]
+            {
+                "blank.png",
+                new string[] { }
+            },
+            new object[]
+            {
+                "empty.png",
+                new string[] { }
+            },
+            new object[]
+            {
+                "Fonts.png",
+                new string[]
+                {
+                    "Bold Italic Fixed Serif CAPITAL 123 x2 y3"
+                }
+            },
+            new object[]
+            {
+                "phototest.png",
+                new string[]
+                {
+                    "This is a lot of 12 point text to test the",
+                    "ocr code and see if it works on all types",
+                    "of file format.",
+                    "The quick brown dog jumped over the",
+                    "lazy fox. The quick brown dog jumped",
+                    "over the lazy fox. The quick brown dog",
+                    "jumped over the lazy fox. The quick",
+                    "brown dog jumped over the lazy fox."
+                }
+            },
+            new object[]
+            {
+                "PSM_SingleBlock.png",
+                new string[]
+                {
+                    "This is a lot of 12 point text to test the",
+                    "ocr code and see if it works on all types",
+                    "of file format."
+                }
+            },
+            new object[]
+            {
+                "PSM_SingleBlockVertText.png",
+                new string[]
+                {
+                    "A", "l", "i", "n", "e", "o", "f", "t", "e", "x", "t"
+                }
+            },
+            new object[]
+            {
+                "PSM_SingleColumn.png",
+                new string[]
+                {
+                    "This is a lot of 12 point text to test the",
+                }
+            },
+            new object[]
+            {
+                "PSM_SingleChar.png",
+                new string[]
+                {
+                    "T"
+                }
+            },
+            new object[]
+            {
+                "PSM_SingleLine.png",
+                new string[]
+                {
+                    "This is a lot of 12 point text to test the",
+                }
+            },
+            new object[]
+            {
+                "PSM_SingleWord.png",
+                new string[]
+                {
+                    "This"
+                }
+            },
+            new object[]
+            {
+                "scewed-phototest.png",
+                new string[]
+                {
+                    "This is a lot of 12 point text to test the",
+                    "ocr code and see if it works on all types",
+                    "of file format.",
+                    "The quick brown dog jumped over the",
+                    "lazy fox. The quick brown dog jumped",
+                    "over the lazy fox. The quick brown dog",
+                    "jumped over the lazy fox. The quick",
+                    "brown dog jumped over the lazy fox."
+                }
+            },
+        };
+
 
         private readonly RapidOcr _ocrEngin;
 
@@ -100,6 +224,38 @@ namespace RapidOcrNet.Tests
         {
             _ocrEngin = new RapidOcr();
             _ocrEngin.InitModels();
+        }
+
+        [Theory]
+        [MemberData(nameof(TesseractImages))]
+        public void TesseractOcrText(string path, string[] expected)
+        {
+            path = Path.Combine("images_tesseract", path);
+
+            Assert.True(File.Exists(path));
+
+            using (SKBitmap originSrc = SKBitmap.Decode(path))
+            {
+                OcrResult ocrResult = _ocrEngin.Detect(originSrc, RapidOcrOptions.Default);
+
+                VisualDebugBbox(Path.ChangeExtension(path, "_ocr.png"), originSrc, ocrResult);
+
+                var actual = ocrResult.TextBlocks.Select(b => b.Chars).ToArray();
+
+                Assert.Equal(expected.Length, actual.Length);
+
+                for (int s = 0; s < expected.Length; s++)
+                {
+                    string expectedSentence = expected[s];
+                    string[] actualSentence = actual[s];
+                    Assert.Equal(expectedSentence.Length, actualSentence.Length);
+
+                    for (int c = 0; c < expectedSentence.Length; c++)
+                    {
+                        Assert.Equal(expectedSentence[c].ToString(), actualSentence[c]);
+                    }
+                }
+            }
         }
 
         [Theory]
@@ -117,8 +273,6 @@ namespace RapidOcrNet.Tests
                 VisualDebugBbox(Path.ChangeExtension(path, "_ocr.png"), originSrc, ocrResult);
 
                 var actual = ocrResult.TextBlocks.Select(b => b.Chars).ToArray();
-
-                //var strs = ocrResult.TextBlocks.Select(b => b.GetText()).ToArray();
 
                 Assert.Equal(expected.Length, actual.Length);
 
