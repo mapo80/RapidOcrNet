@@ -11,11 +11,6 @@ namespace RapidOcrNet
     {
         public static Tensor<float> SubtractMeanNormalize(SKBitmap src, float[] meanVals, float[] normVals)
         {
-            if (src.Info.ColorType != SKColorType.Bgra8888)
-            {
-                throw new ArgumentException($"This image needs to be '{SKColorType.Bgra8888}', but got '{src.Info.ColorType}'.");
-            }
-
             int cols = src.Width;
             int rows = src.Height;
             int channels = src.BytesPerPixel;
@@ -25,18 +20,41 @@ namespace RapidOcrNet
             Tensor<float> inputTensor = new DenseTensor<float>([1, expChannels, rows, cols]);
 
             ReadOnlySpan<byte> span = src.GetPixelSpan();
-            for (int r = 0; r < rows; ++r)
+
+            if (src.Info.ColorType == SKColorType.Gray8)
             {
-                for (int c = 0; c < cols; ++c)
+                for (int r = 0; r < rows; ++r)
                 {
-                    int i = r * cols + c;
-                    for (int ch = 0; ch < expChannels; ++ch)
+                    for (int c = 0; c < cols; ++c)
                     {
-                        byte value = span[i * channels + ch];
-                        inputTensor[0, ch, r, c] = (value - meanVals[ch]) * normVals[ch];
+                        int i = r * cols + c;
+                        byte value = span[i * channels];
+                        inputTensor[0, 0, r, c] = (value - meanVals[0]) * normVals[0];
+                        inputTensor[0, 1, r, c] = (value - meanVals[1]) * normVals[1];
+                        inputTensor[0, 2, r, c] = (value - meanVals[2]) * normVals[2];
                     }
                 }
             }
+            else if (src.Info.ColorType == SKColorType.Bgra8888)
+            {
+                for (int r = 0; r < rows; ++r)
+                {
+                    for (int c = 0; c < cols; ++c)
+                    {
+                        int i = r * cols + c;
+                        for (int ch = 0; ch < expChannels; ++ch)
+                        {
+                            byte value = span[i * channels + ch];
+                            inputTensor[0, ch, r, c] = (value - meanVals[ch]) * normVals[ch];
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new ArgumentException($"This image needs to be '{SKColorType.Bgra8888}' or '{SKColorType.Gray8}', but got '{src.Info.ColorType}'.");
+            }
+
 
             return inputTensor;
         }
@@ -210,12 +228,12 @@ namespace RapidOcrNet
                 canvas.Restore();
             }
 
-//#if DEBUG
-//            using (var fs = new FileStream($"perspective_{Guid.NewGuid()}.png", FileMode.Create))
-//            {
-//                partImg.Encode(fs, SKEncodedImageFormat.Png, 100);
-//            }
-//#endif
+            //#if DEBUG
+            //            using (var fs = new FileStream($"perspective_{Guid.NewGuid()}.png", FileMode.Create))
+            //            {
+            //                partImg.Encode(fs, SKEncodedImageFormat.Png, 100);
+            //            }
+            //#endif
 
             if (partImg.Height >= partImg.Width * 1.5)
             {

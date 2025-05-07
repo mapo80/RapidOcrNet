@@ -8,6 +8,14 @@ namespace RapidOcrNet.Tests
         {
             new object[]
             {
+                "issue_170.png", // Gray8
+                new string[]
+                {
+                    "TEST"
+                }
+            },
+            new object[]
+            {
                 "1997.png",
                 new string[]
                 {

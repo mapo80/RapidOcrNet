@@ -61,6 +61,9 @@
     <None Update="images\img_195.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="images\issue_170.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="images\rotated.PNG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
