@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RapidOcrNet.BenchCli", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RapidOcrNet.ModelsBench.Tests", "tests\RapidOcrNet.ModelsBench.Tests\RapidOcrNet.ModelsBench.Tests.csproj", "{4E617D16-C018-4BB1-BC7B-2888C6286CE0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RapidOcrNet.DemoCli", "src\RapidOcrNet.DemoCli\RapidOcrNet.DemoCli.csproj", "{C366A224-0271-4850-820C-23EF8CCB7E26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
                 {4E617D16-C018-4BB1-BC7B-2888C6286CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
                 {4E617D16-C018-4BB1-BC7B-2888C6286CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
                 {4E617D16-C018-4BB1-BC7B-2888C6286CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+                {C366A224-0271-4850-820C-23EF8CCB7E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+                {C366A224-0271-4850-820C-23EF8CCB7E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+                {C366A224-0271-4850-820C-23EF8CCB7E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+                {C366A224-0271-4850-820C-23EF8CCB7E26}.Release|Any CPU.Build.0 = Release|Any CPU
         EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

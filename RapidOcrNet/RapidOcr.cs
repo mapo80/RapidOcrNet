@@ -29,11 +29,39 @@ namespace RapidOcrNet
             InitModels(detPath, clsPath, recPath, keysPath, numThread);
         }
 
-        public void InitModels(string detPath, string clsPath, string recPath, string keysPath, int numThread)
+        public void InitModels(string detPath, string? clsPath, string recPath, string? keysPath, int numThread)
         {
             _textDetector.InitModel(detPath, numThread);
-            _textClassifier.InitModel(clsPath, numThread);
+            if (!string.IsNullOrEmpty(clsPath))
+            {
+                _textClassifier.InitModel(clsPath, numThread);
+            }
             _textRecognizer.InitModel(recPath, keysPath, numThread);
+        }
+
+        public void InitModels(string detPath, string? clsPath, string recPath, int numThread)
+            => InitModels(detPath, clsPath, recPath, null, numThread);
+
+        public int LabelCount => _textRecognizer.LabelCount;
+        public int ModelClassCount => _textRecognizer.ModelClassCount;
+
+        public static string AutoDiscoverLabelFile(string recPath)
+        {
+            var recDir = Path.GetDirectoryName(recPath) ?? string.Empty;
+            var modelsDir = Path.GetFullPath(Path.Combine(recDir, ".."));
+            if (recPath.Contains("latin_PP-OCRv3_mobile_rec"))
+                return Path.Combine(modelsDir, "labels", "latin_dict.txt");
+            if (recPath.Contains("it_mobile_v2.0_rec"))
+                return Path.Combine(modelsDir, "labels", "it_dict.txt");
+            if (Path.GetFileName(recPath).Contains("ch_"))
+                return Path.Combine(modelsDir, "rec", "ppocr_keys_v1.txt"); // Chinese models use original dictionary
+            var en = Path.Combine(modelsDir, "labels", "en_dict.txt");
+            if (File.Exists(en))
+            {
+                Console.WriteLine($"WARN No dictionary provided; using {en}");
+                return en;
+            }
+            throw new FileNotFoundException("No dictionary provided and english dictionary not found. Specify RAPIDOCR_KEYS or RapidOcr:LabelFile.");
         }
 
         public OcrResult Detect(string img, RapidOcrOptions options)

@@ -20,14 +20,20 @@ namespace RapidOcrNet
         private InferenceSession _crnnNet;
         private string[] _keys;
         private string _inputName;
+        public int LabelCount { get; private set; }
+        public int ModelClassCount { get; private set; }
 
-        public void InitModel(string path, string keysPath, int numThread)
+        public void InitModel(string path, string? keysPath, int numThread)
         {
             if (!File.Exists(path))
             {
                 throw new FileNotFoundException($"Recognizer model file does not exist: '{path}'.");
             }
 
+            if (string.IsNullOrEmpty(keysPath))
+            {
+                keysPath = RapidOcr.AutoDiscoverLabelFile(path);
+            }
             if (!File.Exists(keysPath))
             {
                 throw new FileNotFoundException($"Recognizer keys file does not exist: '{keysPath}'.");
@@ -43,6 +49,13 @@ namespace RapidOcrNet
             _crnnNet = new InferenceSession(path, op);
             _inputName = _crnnNet.InputMetadata.Keys.First();
             _keys = InitKeys(keysPath);
+            var meta = _crnnNet.OutputMetadata.First().Value;
+            ModelClassCount = meta.Dimensions[^1];
+            LabelCount = _keys.Length - 1; // dictionary lines without CTC blank
+            if (ModelClassCount != _keys.Length)
+            {
+                throw new InvalidDataException($"Dictionary mismatch: model classes={ModelClassCount}, labels={LabelCount}+blank. Use a dictionary that matches the recognizer (latin_dict.txt per latin, it_dict.txt per it).");
+            }
         }
 
         private static string[] InitKeys(string path)
