@@ -110,7 +110,7 @@ namespace RapidOcrNet
                 //throw ex;
             }
 
-            return new TextLine() { Time = sw.ElapsedMilliseconds };
+            return new TextLine() { Chars = Array.Empty<string>(), CharScores = Array.Empty<float>(), Time = sw.ElapsedMilliseconds };
         }
 
         private TextLine ScoreToTextLine(ReadOnlySpan<float> srcData, int h, int w)
@@ -151,7 +151,7 @@ namespace RapidOcrNet
 
         public void Dispose()
         {
-            _crnnNet.Dispose();
+            _crnnNet?.Dispose();
         }
     }
 }

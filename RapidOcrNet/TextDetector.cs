@@ -475,7 +475,7 @@ namespace RapidOcrNet
 
         public void Dispose()
         {
-            _dbNet.Dispose();
+            _dbNet?.Dispose();
         }
     }
 }

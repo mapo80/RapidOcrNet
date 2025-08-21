@@ -133,7 +133,7 @@ namespace RapidOcrNet
 
         public void Dispose()
         {
-            _angleNet.Dispose();
+            _angleNet?.Dispose();
         }
     }
 }

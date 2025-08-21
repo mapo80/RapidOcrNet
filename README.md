@@ -52,3 +52,15 @@ The dependency on OpenCV was removed thanks to the PContour library and its C# p
 The models made available are from the PaddleOCR project (Apache-2.0 license) and were converted to ONNX using the Paddle2ONNX tool.
 - https://paddlepaddle.github.io/PaddleOCR/en/ppocr/model_list.html
 - https://github.com/PaddlePaddle/Paddle2ONNX
+
+## Benchmark
+
+Two recognition models can be evaluated with the benchmark CLI:
+
+```bash
+# latin v3
+dotnet run --project src/RapidOcrNet.BenchCli -- --images tests/RapidOcrNet.ModelsBench.Tests/assets --rec models/rec/latin_PP-OCRv3_mobile_rec_infer.onnx --out docs/eval
+
+# italiano v2
+dotnet run --project src/RapidOcrNet.BenchCli -- --images tests/RapidOcrNet.ModelsBench.Tests/assets --rec models/rec/it_mobile_v2.0_rec_infer.onnx --out docs/eval
+```
