@@ -86,4 +86,22 @@ RAPIDOCR_KEYS="models/labels/it_dict.txt" \
 dotnet run --project src/RapidOcrNet.DemoCli -- -i samples/scan.png
 ```
 
+### Batch dataset
+
+```bash
+# latin v3
+RAPIDOCR_REC="models/rec/latin_PP-OCRv3_mobile_rec_infer.onnx" \
+RAPIDOCR_KEYS="models/labels/latin_dict.txt" \
+dotnet run --project src/RapidOcrNet.DemoCli -- \
+  --input dataset/busta-paga --out dataset/busta-paga/_ocr --csv dataset/busta-paga/_ocr/summary.csv
+
+# italiano v2
+RAPIDOCR_REC="models/rec/it_mobile_v2.0_rec_infer.onnx" \
+RAPIDOCR_KEYS="models/labels/it_dict.txt" \
+dotnet run --project src/RapidOcrNet.DemoCli -- \
+  --input dataset/busta-paga --out dataset/busta-paga/_ocr --csv dataset/busta-paga/_ocr/summary.csv
+```
+
+The `_ocr` directory will contain one `.txt` file per image and a `summary.csv` file with timings and the final average on a row named `average`.
+
 At startup the library checks that the recognizer output classes match the dictionary lines (`numClass == labels+1`). If a mismatched dictionary is provided the execution stops with a clear error message indicating the expected dictionary.
