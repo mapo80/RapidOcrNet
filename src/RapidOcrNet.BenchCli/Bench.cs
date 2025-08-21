@@ -21,7 +21,7 @@ public static class Bench
     {
         var det = opts.Det ?? AutoDiscover("det*infer*.onnx");
         var cls = opts.Cls ?? AutoDiscover("cls*infer*.onnx");
-        var keys = AutoDiscoverKeys(opts.Rec);
+        var keys = RapidOcr.AutoDiscoverLabelFile(opts.Rec);
         var modelName = Path.GetFileNameWithoutExtension(opts.Rec);
         var timestampDir = Path.Combine(opts.OutDir, DateTime.Now.ToString("yyyyMMdd-HHmm"));
         Directory.CreateDirectory(timestampDir);
@@ -112,11 +112,4 @@ public static class Bench
         return file;
     }
 
-    private static string AutoDiscoverKeys(string rec)
-    {
-        var dir = Path.GetDirectoryName(rec)!;
-        var file = Directory.GetFiles(dir, "*.txt").FirstOrDefault();
-        if (file != null) return file;
-        return Path.Combine("models", "rec", "ppocr_keys_v1.txt");
-    }
 }

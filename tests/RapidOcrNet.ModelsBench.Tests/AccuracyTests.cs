@@ -27,7 +27,7 @@ public class AccuracyTests
     private static string Repo => Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
     private static string DetPath => Environment.GetEnvironmentVariable("RAPIDOCR_DET") ?? Path.Combine(Repo, "RapidOcrNet", "models", "en_PP-OCRv3_det_infer_opt.onnx");
     private static string ClsPath => Environment.GetEnvironmentVariable("RAPIDOCR_CLS") ?? Path.Combine(Repo, "RapidOcrNet", "models", "ch_ppocr_mobile_v2.0_cls_infer_opt.onnx");
-    private static string KeysPath(string rec) => Directory.GetFiles(Path.GetDirectoryName(Path.Combine(Repo, rec))!, "*.txt").FirstOrDefault() ?? Path.Combine(Repo, "models", "rec", "ppocr_keys_v1.txt");
+    private static string KeysPath(string rec) => RapidOcr.AutoDiscoverLabelFile(Path.Combine(Repo, rec));
 
     [Theory]
     [MemberData(nameof(ModelData))]

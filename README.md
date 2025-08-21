@@ -64,3 +64,26 @@ dotnet run --project src/RapidOcrNet.BenchCli -- --images tests/RapidOcrNet.Mode
 # italiano v2
 dotnet run --project src/RapidOcrNet.BenchCli -- --images tests/RapidOcrNet.ModelsBench.Tests/assets --rec models/rec/it_mobile_v2.0_rec_infer.onnx --out docs/eval
 ```
+
+## Dictionaries
+
+| Recognizer ONNX | Dizionario richiesto |
+|---|---|
+| models/rec/latin_PP-OCRv3_mobile_rec_infer.onnx | models/labels/latin_dict.txt |
+| models/rec/it_mobile_v2.0_rec_infer.onnx | models/labels/it_dict.txt |
+
+Example usage with the demo CLI:
+
+```bash
+# latin v3
+RAPIDOCR_REC="models/rec/latin_PP-OCRv3_mobile_rec_infer.onnx" \
+RAPIDOCR_KEYS="models/labels/latin_dict.txt" \
+dotnet run --project src/RapidOcrNet.DemoCli -- -i samples/scan.png
+
+# italiano v2
+RAPIDOCR_REC="models/rec/it_mobile_v2.0_rec_infer.onnx" \
+RAPIDOCR_KEYS="models/labels/it_dict.txt" \
+dotnet run --project src/RapidOcrNet.DemoCli -- -i samples/scan.png
+```
+
+At startup the library checks that the recognizer output classes match the dictionary lines (`numClass == labels+1`). If a mismatched dictionary is provided the execution stops with a clear error message indicating the expected dictionary.
