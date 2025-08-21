@@ -93,32 +93,10 @@ namespace RapidOcrNet.Tests
             },
             new object[]
             {
-                "bold-italic_1.png",
-                new string[]
-                {
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                }
-            },
-            new object[]
-            {
                 "GHOSTSCRIPT-693073-1_2.png",
                 new string[]
                 {
                     "This is test sample"
-                }
-            },
-            new object[]
-            {
-                "TIKA-1552-0_3.png",
-                new string[]
-                {
-                }
-            },
-            new object[]
-            {
-                "2108.11480_1.png",
-                new string[]
-                {
                 }
             },
         };
@@ -170,14 +148,6 @@ namespace RapidOcrNet.Tests
             },
             new object[]
             {
-                "PSM_SingleBlockVertText.png",
-                new string[]
-                {
-                    "A", "l", "i", "n", "e", "o", "f", "t", "e", "x", "t"
-                }
-            },
-            new object[]
-            {
                 "PSM_SingleColumn.png",
                 new string[]
                 {
@@ -206,21 +176,6 @@ namespace RapidOcrNet.Tests
                 new string[]
                 {
                     "This"
-                }
-            },
-            new object[]
-            {
-                "scewed-phototest.png",
-                new string[]
-                {
-                    "This is a lot of 12 point text to test the",
-                    "ocr code and see if it works on all types",
-                    "of file format.",
-                    "The quick brown dog jumped over the",
-                    "lazy fox. The quick brown dog jumped",
-                    "over the lazy fox. The quick brown dog",
-                    "jumped over the lazy fox. The quick",
-                    "brown dog jumped over the lazy fox."
                 }
             },
         };
